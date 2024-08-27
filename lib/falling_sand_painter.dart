@@ -1,8 +1,9 @@
+import 'package:falling_sand/tab_actions/ground_actions.dart';
 import 'package:flutter/material.dart';
 
 class FallingSandPainter extends CustomPainter {
   FallingSandPainter(this.state);
-  final List<List<Color?>> state;
+  final List<List<int?>> state;
   Paint paintBrush = Paint();
 
   @override
@@ -20,7 +21,10 @@ class FallingSandPainter extends CustomPainter {
         final color = state[col][row];
         if (color != null) {
           final rect = Offset(col * divisionX, row * divisionY) & cellSize;
-          canvas.drawRect(rect, paintBrush..color = color);
+          canvas.drawRect(
+            rect,
+            paintBrush..color = colorMapping[color] ?? Colors.white,
+          );
         }
       }
     }

@@ -4,6 +4,7 @@ import 'package:falling_sand/creation_model.dart';
 import 'package:falling_sand/falling_sand_painter.dart';
 import 'package:falling_sand/login_widget.dart';
 import 'package:falling_sand/main.dart';
+import 'package:falling_sand/tab_actions/ground_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -61,7 +62,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
         body: {
           'user': (data?.model as RecordModel).id,
           'data': creation.value
-              .map((row) => row.map((cell) => cell?.value).toList())
+              .map((row) => row.map((cell) => colorMapping[cell]).toList())
               .toList(),
         },
       );
@@ -301,7 +302,7 @@ class CreationView extends StatelessWidget {
     super.key,
   });
 
-  final List<List<Color?>> state;
+  final List<List<int?>> state;
   final Size size;
 
   @override

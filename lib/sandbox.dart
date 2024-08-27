@@ -12,7 +12,7 @@ class Sandbox extends StatelessWidget {
     super.key,
   });
 
-  final List<List<Color?>> state;
+  final List<List<int?>> state;
   final Size size;
 
   final ValueSetter<Offset> onPointerHover;

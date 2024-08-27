@@ -165,7 +165,7 @@ class _FallingSandState extends State<FallingSand>
             // it means that it grow on the side only for this tick
             final canGrowOnTheSide = random.nextInt(1000);
             if (isEmptyAbove && random.nextInt(4000) == 0) {
-              newState[col][row - 1] = getElementColor(element!);
+              newState[col][row - 1] = getElementColorIndex(element!);
             }
           }
         }
@@ -179,10 +179,10 @@ class _FallingSandState extends State<FallingSand>
 
   int cellCount = 50;
 
-  List<List<Color?>> get state => creation.value;
-  set state(List<List<Color?>> val) => creation.value = val;
+  List<List<int?>> get state => creation.value;
+  set state(List<List<int?>> val) => creation.value = val;
 
-  static List<List<Color?>> emptyState(int size) =>
+  static List<List<int?>> emptyState(int size) =>
       List.generate(size, (i) => List.generate(size, (j) => null));
 
   final size = const Size.square(500);
@@ -192,7 +192,7 @@ class _FallingSandState extends State<FallingSand>
     size.height / cellCount,
   );
 
-  Color color = Colors.black;
+  int color = 0;
 
   bool tetrominoEnabled = false;
 
@@ -267,7 +267,7 @@ class _FallingSandState extends State<FallingSand>
     int dimension,
     PixelElement? element,
     int factor,
-    Color? v,
+    int? v,
   ) {
     for (var i = 0; i < dimension * factor; i++) {
       for (var j = 0; j < dimension * factor; j++) {
@@ -275,13 +275,13 @@ class _FallingSandState extends State<FallingSand>
             state[x + i].length > y + j &&
             state[x + i][y + j] == null) {
           state[x + i][y + j] =
-              (element == null) ? v : getElementColor(_selectedElement!);
+              (element == null) ? v : getElementColorIndex(_selectedElement!);
         }
       }
     }
   }
 
-  void applyPen(int x, int y, Color? v) {
+  void applyPen(int x, int y, int? v) {
     final factor = switch (cellCount) {
       50 => 1,
       250 => 2,
@@ -391,17 +391,17 @@ class _FallingSandState extends State<FallingSand>
               CursorSizeOptions(
                 onSize: (s) => setState(() => cursorSize = s),
                 size: cursorSize,
-                color: color,
+                color: colorMapping[color],
               ),
               const SizedBox(width: 8),
               EditActionOptions(
                 onAction: (a) => setState(() => action = a),
                 action: action,
-                color: color,
+                color: colorMapping[color],
               ),
               const SizedBox(width: 8),
               SandBehaviorOptions(
-                color: color,
+                color: colorMapping[color]!,
                 onBehavior: (value) => setState(() => sandBehavior = value),
                 sandBehavior: sandBehavior,
               ),

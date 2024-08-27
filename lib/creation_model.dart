@@ -1,3 +1,4 @@
+import 'package:falling_sand/tab_actions/ground_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -21,7 +22,7 @@ class CreationModel {
             .map((c) => (c as List<dynamic>).cast<int?>())
             .map(
               (r) => r
-                  .map((value) => value == null ? null : Color(value))
+                  .map((value) => value == null ? null : 0) // TO DO : fix lol
                   .toList(),
             )
             .toList(),
@@ -32,6 +33,6 @@ class CreationModel {
       'The format of the response is not supported.\n$source',
     );
   }
-  final List<List<Color?>> data;
+  final List<List<int?>> data;
   final String? user;
 }

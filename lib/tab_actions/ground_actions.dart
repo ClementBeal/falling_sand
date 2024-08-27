@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 
 enum PixelElement { dirt, water, sand, grass }
 
-PixelElement? getElementByColor(Color? color) => elementColors.entries
+PixelElement? getElementByColor(int? color) => elementColors.entries
     .firstWhereOrNull(
       (element) => element.value.contains(color),
     )
     ?.key;
+
+int getElementColorIndex(PixelElement element) {
+  return elementColors[element]![
+      _random.nextInt(elementColors[element]!.length)];
+}
 
 // kg/m3
 final density = <PixelElement, int>{
@@ -30,33 +35,46 @@ final elementState = <PixelElement, ElementState>{
 
 final _random = Random();
 
-Map<PixelElement, List<Color>> elementColors = {
-  PixelElement.dirt: const [
-    Color(0xff645244),
-    Color(0xff796353),
-    Color(0xff866D5B),
-  ],
-  PixelElement.water: const [
-    Color(0xff109ee5),
-    Color(0xff2DAFF0),
-    Color(0xff0D84BF),
-  ],
-  PixelElement.sand: const [
-    Color(0xffF5DEB3),
-    Color(0xffF1D093),
-    Color(0xffEFC881),
-  ],
-  PixelElement.grass: const [
-    Color(0xff3B684D),
-    Color(0xff51906A),
-    Color(0xff6FAE89),
-  ],
+Map<PixelElement, List<int>> elementColors = {
+  PixelElement.dirt: const [19, 20, 21],
+  PixelElement.water: const [22, 23, 24],
+  PixelElement.sand: const [25, 26, 27],
+  PixelElement.grass: const [28, 29, 30],
 };
 
-Color getElementColor(PixelElement element) {
-  return elementColors[element]![
-      _random.nextInt(elementColors[element]!.length)];
-}
+final colorMapping = <int, Color>{
+  0: Colors.red,
+  1: Colors.pink,
+  2: Colors.purple,
+  3: Colors.deepPurple,
+  4: Colors.indigo,
+  5: Colors.blue,
+  6: Colors.lightBlue,
+  7: Colors.cyan,
+  8: Colors.teal,
+  9: Colors.green,
+  10: Colors.lightGreen,
+  11: Colors.lime,
+  12: Colors.yellow,
+  13: Colors.amber,
+  14: Colors.orange,
+  15: Colors.deepOrange,
+  16: Colors.brown,
+  17: Colors.blueGrey,
+  18: Colors.black,
+  19: const Color(0xff645244),
+  20: const Color(0xff796353),
+  21: const Color(0xff866D5B),
+  22: const Color(0xff109ee5),
+  23: const Color(0xff2DAFF0),
+  24: const Color(0xff0D84BF),
+  25: const Color(0xffF5DEB3),
+  26: const Color(0xffF1D093),
+  27: const Color(0xffEFC881),
+  28: const Color(0xff3B684D),
+  29: const Color(0xff51906A),
+  30: const Color(0xff6FAE89),
+};
 
 class GroundActions extends StatelessWidget {
   const GroundActions({required this.onElementChanged, super.key});

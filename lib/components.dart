@@ -1,4 +1,5 @@
 import 'package:falling_sand/main.dart';
+import 'package:falling_sand/tab_actions/ground_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -71,7 +72,7 @@ class TetrominoIconButton extends StatelessWidget {
 class ColorOptions extends StatelessWidget {
   const ColorOptions({required this.onColor, super.key});
 
-  final ValueSetter<Color> onColor;
+  final ValueSetter<int> onColor;
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +81,11 @@ class ColorOptions extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final color in [...Colors.primaries, Colors.black])
+          for (final entry in colorMapping.entries.take(19))
             IconButton(
               icon: const Icon(Icons.square),
-              color: color,
-              onPressed: () => onColor(color),
+              color: entry.value,
+              onPressed: () => onColor(entry.key),
             ),
         ],
       ),

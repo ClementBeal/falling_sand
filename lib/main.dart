@@ -249,107 +249,43 @@ class _FallingSandState extends State<FallingSand>
     }
   }
 
-  void applyPen(int x, int y, Color? v) {
-    switch (cursorSize) {
-      case CursorSize.small:
-        // 1x1 square
-        setState(
-          () => state[x][y] = (_selectedElement == null)
-              ? v
-              : getElementColor(_selectedElement!),
-        );
-
-      case CursorSize.medium:
-        // 2x2 square and the top left corner is the mouse position
-        setState(() {
-          state[x][y] = (_selectedElement == null)
-              ? v
-              : getElementColor(_selectedElement!);
-
-          if (state.length > x + 1 && state[x + 1][y] == null) {
-            state[x + 1][y] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
+  void _applyPenSquare(
+    int x,
+    int y,
+    int dimension,
+    PixelElement? element,
+    int factor,
+    Color? v,
+  ) {
+    for (var i = 0; i < dimension * factor; i++) {
+      for (var j = 0; j < dimension * factor; j++) {
+        if (state.length > x + i && // check the x
+            state[x + i].length > y + j &&
+            state[x + i][y + j] == null) {
+          state[x + i][y + j] =
+              (element == null) ? v : getElementColor(_selectedElement!);
           }
-          if (state[x].length > y + 1 && state[x][y + 1] == null) {
-            state[x][y + 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-          if (state.length > x + 1 &&
-              state[x + 1].length > y + 1 &&
-              state[x + 1][y + 1] == null) {
-            state[x + 1][y + 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-        });
-
-      case CursorSize.big:
-        // 3x3 square and the center is the mouse position
-        setState(() {
-          // row above the mouse
-          if (x - 1 >= 0 && y - 1 >= 0 && state[x - 1][y - 1] == null) {
-            state[x - 1][y - 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-          if (y - 1 >= 0 && state[x][y - 1] == null) {
-            state[x][y - 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-          if (state.length > x + 1 &&
-              y - 1 >= 0 &&
-              state[x + 1][y - 1] == null) {
-            state[x + 1][y - 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-
-          // row at the same level than the mouse
-
-          if (x - 1 >= 0 && state[x - 1][y] == null) {
-            state[x - 1][y] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-
-          state[x][y] = (_selectedElement == null)
-              ? v
-              : getElementColor(_selectedElement!);
-
-          if (state.length > x + 1 && state[x + 1][y] == null) {
-            state[x + 1][y] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-
-          // row under the mouse
-
-          if (x - 1 >= 0 &&
-              state[x - 1].length > y + 1 &&
-              state[x - 1][y + 1] == null) {
-            state[x - 1][y + 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-
-          if (state[x].length > y + 1 && state[x][y + 1] == null) {
-            state[x][y + 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-
-          if (state.length > x + 1 &&
-              state[x + 1].length > y + 1 &&
-              state[x + 1][y + 1] == null) {
-            state[x + 1][y + 1] = (_selectedElement == null)
-                ? v
-                : getElementColor(_selectedElement!);
-          }
-        });
+      }
     }
+  }
+
+  void applyPen(int x, int y, Color? v) {
+    final factor = switch (cellCount) {
+      50 => 1,
+      250 => 2,
+      500 => 3,
+      _ => 0,
+    };
+
+    final squareDimension = switch (cursorSize) {
+      CursorSize.small => 1,
+      CursorSize.medium => 2,
+      CursorSize.big => 3,
+    };
+
+    setState(
+      () => _applyPenSquare(x, y, squareDimension, _selectedElement, factor, v),
+    );
   }
 
   void positionToCellUpdate(Offset offset) {

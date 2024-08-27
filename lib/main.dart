@@ -93,6 +93,7 @@ class _FallingSandState extends State<FallingSand>
 
         if (color != null) {
           final hasSomethingDown = row + 1 < cellCount;
+          final hasSomethingUp = row - 1 >= 0;
           final canMoveDown =
               hasSomethingDown && newState[col][row + 1] == null;
 
@@ -156,6 +157,17 @@ class _FallingSandState extends State<FallingSand>
               }
             }
           }
+
+          if (element == PixelElement.grass) {
+            final isEmptyAbove =
+                hasSomethingUp && newState[col][row - 1] == null;
+
+            // it means that it grow on the side only for this tick
+            final canGrowOnTheSide = random.nextInt(1000);
+            if (isEmptyAbove && random.nextInt(4000) == 0) {
+              newState[col][row - 1] = getElementColor(element!);
+            }
+          }
         }
       }
     }
@@ -173,7 +185,7 @@ class _FallingSandState extends State<FallingSand>
   static List<List<Color?>> emptyState(int size) =>
       List.generate(size, (i) => List.generate(size, (j) => null));
 
-  final size = const Size.square(1000);
+  final size = const Size.square(500);
 
   late Size cellSize = Size(
     size.width / cellCount,
@@ -264,7 +276,7 @@ class _FallingSandState extends State<FallingSand>
             state[x + i][y + j] == null) {
           state[x + i][y + j] =
               (element == null) ? v : getElementColor(_selectedElement!);
-          }
+        }
       }
     }
   }
